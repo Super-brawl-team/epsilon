@@ -15,11 +15,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: numworks/setup-llvm@latest
+      - run: LD_LIBRARY_PATH=$LLVM_PATH/lib/x86_64-unknown
       - run: build/setup.sh --only-simulator
       - name: Build PR head
         run: make -j32 TOOLCHAIN=host-clang PLATFORM=simulator ASSERTIONS=1 epsilon.bin
       - name: Compare screenshot images
-        run: LD_LIBRARY_PATH=/home/usain/_work/_tool/llvm/15.0.6/x64/lib/x86_64-unknown-linux-gnu/ python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin
+        run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin
       - name: Upload output
         if: failure()
         uses: actions/upload-artifact@v3
