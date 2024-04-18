@@ -4,6 +4,9 @@ on:
   # TODO_PCJ: Remove this condition to reactivate CI
     branches:
       - workflow-disabled
+    paths-ignore:
+      - '**/*.md'
+      - 'poincare/doc/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
