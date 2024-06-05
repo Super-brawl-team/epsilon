@@ -1,9 +1,6 @@
 name: Screenshots
 on:
   pull_request:
-  # TODO_PCJ: Remove this condition to reactivate CI
-    branches:
-      - workflow-disabled
     paths-ignore:
       - '**/*.md'
       - 'poincare/doc/**'
@@ -21,12 +18,26 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: numworks/setup-llvm@latest
-      - run: LD_LIBRARY_PATH=$LLVM_PATH/lib/x86_64-unknown
+      - run: echo "LD_LIBRARY_PATH=$LLVM_PATH/lib/x86_64-unknown-linux-gnu/" >> $GITHUB_ENV
       - run: build/setup.sh --only-simulator
       - name: Build PR head
         run: make -j32 TOOLCHAIN=host-clang PLATFORM=simulator ASSERTIONS=1 epsilon.bin
-      - name: Compare screenshot images
-        run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin
+      # - name: Compare screenshot images
+      # TODO_PCJ: restore all filtered versions and then the unfiltered version
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f calculation
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f distributions
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f elements
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f exam_mode
+      - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f finance
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f grapher
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f inference
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f python
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f regression
+      - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f sequences
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f solver
+      - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f statistics
+      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f toolbox
       - name: Upload output
         if: failure()
         uses: actions/upload-artifact@v3
