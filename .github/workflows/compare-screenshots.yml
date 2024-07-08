@@ -26,7 +26,7 @@ jobs:
       # TODO_PCJ: restore all filtered versions and then the unfiltered version
       # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin
       # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f calculation
-      # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f distributions
+      - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f distributions
       - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f elements
       # - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f exam_mode
       - run: python3 build/screenshots/compare_crc.py output/release/simulator/linux/epsilon.bin -f finance
