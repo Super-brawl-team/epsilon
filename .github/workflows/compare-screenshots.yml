@@ -29,6 +29,7 @@ jobs:
       # - run: python3 build/screenshots/compare_crc.py output/release/linux/epsilon.bin
       # - run: python3 build/screenshots/compare_crc.py output/release/linux/epsilon.bin -f calculation
       - run: python3 build/screenshots/compare_crc.py output/release/linux/epsilon.bin -f calculation_simple
+      - run: python3 build/screenshots/compare_crc.py output/release/linux/epsilon.bin -f calculation_input
 
       - run: python3 build/screenshots/compare_crc.py output/release/linux/epsilon.bin -f distributions
       - run: python3 build/screenshots/compare_crc.py output/release/linux/epsilon.bin -f elements
