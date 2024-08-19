@@ -18,15 +18,14 @@ jobs:
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           submodules: ${{ secrets.PAT != null }}
-          ref:  ${{ github.event.pull_request.base.sha }} # TODO: common ancestor?
-          path: base
+          ref:  ${{ github.event.pull_request.head.sha }} # TODO: common ancestor?
       - name: Install dependencies
         run: build/setup.sh --only-simulator
       - name: Build coverage target
         run: make -j32 TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=1 coverage
       - name: Shorten base commit
         id: base_commit
-        run: echo "base_sha=$(git rev-parse --short ${{ github.event.pull_request.base.sha}} )" >> $GITHUB_OUTPUT
+        run: echo "base_sha=$(git rev-parse --short ${{ github.event.pull_request.head.sha}} )" >> $GITHUB_OUTPUT
       - name: Upload BASE coverage
         uses: actions/upload-artifact@v4
         with:
@@ -58,7 +57,7 @@ jobs:
           retention-days: 7
       - name: Shorten base commit
         id: base_commit
-        run: echo "base_sha=$(git rev-parse --short ${{ github.event.pull_request.base.sha }} )" >> $GITHUB_OUTPUT
+        run: echo "base_sha=$(git rev-parse --short ${{ github.event.pull_request.head.sha }} )" >> $GITHUB_OUTPUT
       # - name: Generate report
         # TODO: make a clean target for the HTLM coverage report
         # run: genhtml coverage_info_output/head.info -o report
