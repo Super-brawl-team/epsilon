@@ -29,11 +29,11 @@ jobs:
       - name: Upload BASE coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage_info_${{ steps.base_commit.outputs.base_sha }}
+          name: base.info
           path: output/debug/linux/coverage/code_coverage.info
           retention-days: 7
   coverage-current-branch:
-    needs: coverage-base-branch
+    # needs: coverage-base-branch
     runs-on: ${{ endswith(github.repository, '/epsilon-internal') && 'self-hosted' || 'ubuntu-latest' }}
     steps:
       - name: Checkout current branch
@@ -42,32 +42,51 @@ jobs:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           submodules: ${{ secrets.PAT != null }}
           ref:  ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
       - name: Install dependencies
         run: build/setup.sh --only-simulator
       - name: Build coverage target
         run: make -j32 TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=1 coverage
-      - name: Shorten HEAD commit
-        id: head_commit
-        run: echo "head_sha=$(git rev-parse --short ${{ github.event.pull_request.head.sha }} )" >> $GITHUB_OUTPUT
-      - name: Upload HEAD coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage_info_${{ steps.head_commit.outputs.head_sha }}
-          path: output/debug/linux/coverage/code_coverage.info
-          retention-days: 7
-      - name: Shorten base commit
-        id: base_commit
-        run: echo "base_sha=$(git rev-parse --short ${{ github.event.pull_request.head.sha }} )" >> $GITHUB_OUTPUT
-      # - name: Generate report
-        # TODO: make a clean target for the HTLM coverage report
-        # run: genhtml coverage_info_output/head.info -o report
-        # TODO: add base.info as a baseline, but needs a more recent version of genhtml
-        # When the --baseline option is available (after the debian update?) one will need to first fetch the source diff between HEAD and BASE:
-        # run: git diff ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} > diff.txt
-        # Then generate a report for HEAD enriched with the comparison to BASE:
-        # run: genhtml coverage_info_output/head.info -o report --baseline base.info --diff diff.txt
+      - run: cp output/debug/linux/coverage/code_coverage.info output/debug/linux/coverage/base.info # TEST
+      # - name: Download base info
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: base.info
+      # - name: Generate diff file
+      #   run: git diff ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} > diff.txt
+      - name: Generate coverage report
+        # run: genhtml output/debug/linux/coverage/code_coverage.info -o report --baseline-file output/debug/linux/coverage/base.info --diff diff.txt
+        run: genhtml output/debug/linux/coverage/code_coverage.info -o report --baseline-file output/debug/linux/coverage/base.info
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
-          name: coverage_report_${{ steps.head_commit.outputs.head_sha }}_base_${{ steps.base_commit.outputs.base_sha }}
-          path: coverage_output #TODO: path of the 'report' target (will be in output/debug/...)
+          name: coverage_report
+          path: report
+      - name: Head coverage summary
+        id: head_summary
+        run: lcov --summary code_coverage.info >> head_summary.txt
+      - name: Base coverage summary
+        id: base_summary
+        run: lcov --summary base.info >> base_summary.txt
+      - name: Shorten HEAD commit
+        id: head_commit
+        run: echo "head_sha=$(git rev-parse --short ${{ github.event.pull_request.head.sha }} )" >> $GITHUB_OUTPUT
+      - name: Shorten base commit
+        id: base_commit
+        run: echo "base_sha=$(git rev-parse --short ${{ github.event.pull_request.head.sha }} )" >> $GITHUB_OUTPUT
+      - name: Add comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            var fs = require('fs');
+            var head_coverage_summary = fs.readFileSync('./head_summary.txt');
+            var base_coverage_summary = fs.readFileSync('./base_summary.txt');
+            var head_commit = "${{ steps.head_commit.outputs.head_sha }}";
+            var base_commit = "${{ steps.base_commit.outputs.base_sha }}";
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "### Coverage report \n\n#### HEAD (" + head_commit + ")\n" + head_coverage_summary + "\n\n#### BASE (" + base_commit + ")\n" + base_coverage_summary
+            });
