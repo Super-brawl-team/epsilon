@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: build/setup.sh --only-simulator
       - name: Build coverage target
-        run: make -j32 TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=0 ASSERTIONS=1 coverage
+        run: make -j32 TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=0 ASSERTIONS=0 coverage
       - name: Rename base.info
         run: mv output/release/linux/coverage/code_coverage.info output/release/linux/coverage/base.info
       - name: Upload BASE coverage
@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: build/setup.sh --only-simulator
       - name: Build coverage target
-        run: make -j32 TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=0 ASSERTIONS=1 coverage
+        run: make -j32 TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=0 ASSERTIONS=0 coverage
       - name: Rename head.info
         run: mv output/release/linux/coverage/code_coverage.info output/release/linux/coverage/head.info
       - name: Upload HEAD coverage
