@@ -78,7 +78,7 @@ jobs:
           path: diff.txt
           retention-days: 7
       - name: Generate coverage report
-        run: genhtml output/debug/linux/coverage/head.info -o report --baseline-file output/debug/linux/coverage/base.info --diff diff.txt --elide-path-mismatch | grep "coverage rate:" -A 40 > genhtml_output.txt
+        run: genhtml output/debug/linux/coverage/head.info -o report --baseline-file output/debug/linux/coverage/base.info --diff-file diff.txt --elide-path-mismatch | grep "coverage rate:" -A 40 > genhtml_output.txt
       - name: Upload report
         id: report
         uses: actions/upload-artifact@v4
