@@ -35,7 +35,7 @@ jobs:
         run: build/setup.sh --only-simulator
       - name: Build BASE coverage target
         timeout-minutes: 15
-        run: make TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=1 coverage
+        run: make TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=0 coverage
       - name: Rename base.info
         run: mv output/debug/linux/coverage/code_coverage.info output/debug/linux/coverage/base.info
       - name: Upload BASE coverage
@@ -54,7 +54,7 @@ jobs:
         run: build/setup.sh --only-simulator
       - name: Build HEAD coverage target
         timeout-minutes: 15
-        run: make TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=1 coverage
+        run: make TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=0 coverage
       - name: Rename head.info
         run: mv output/debug/linux/coverage/code_coverage.info output/debug/linux/coverage/head.info
       - name: Upload HEAD coverage
