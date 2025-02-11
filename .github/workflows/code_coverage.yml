@@ -47,7 +47,7 @@ jobs:
       - name: Upload BASE coverage summary
         uses: actions/upload-artifact@v4
         with:
-          name: base_summary.txt
+          name: base_summary
           path: base_summary.txt
           retention-days: 2
       - name: Remove base summary
@@ -79,7 +79,7 @@ jobs:
       - name: Download BASE coverage summary
         uses: actions/download-artifact@v4
         with:
-          name: base_summary.txt
+          name: base_summary
       - name: Generate diff file
         run: /usr/local/share/lcov/support-scripts/gitdiff ${{ steps.common_ancestor.outputs.commit_sha }} ${{ github.event.pull_request.head.sha }} > diff.txt
       - name: Upload diff file # useful for debug
