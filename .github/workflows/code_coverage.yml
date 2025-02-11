@@ -50,6 +50,8 @@ jobs:
           name: base_summary.txt
           path: base_summary.txt
           retention-days: 2
+      - name: Remove base summary
+        run: rm base_summary.txt
       - name: Checkout current branch
         uses: actions/checkout@v4
         with:
@@ -78,7 +80,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: base_summary.txt
-          path: base_summary.txt
       - name: Generate diff file
         run: /usr/local/share/lcov/support-scripts/gitdiff ${{ steps.common_ancestor.outputs.commit_sha }} ${{ github.event.pull_request.head.sha }} > diff.txt
       - name: Upload diff file # useful for debug
