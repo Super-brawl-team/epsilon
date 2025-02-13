@@ -38,7 +38,7 @@ jobs:
         run: mkdir -p ${{ env.COVERAGE_OUTPUT_DIR }}
       - name: Build BASE coverage target
         timeout-minutes: 15
-        run: touch ${{ env.COVERAGE_OUTPUT_DIR }}/base_summary.txt && make TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=0 coverage | grep "coverage rate:" -A 4 > ${{ env.COVERAGE_OUTPUT_DIR }}/base_summary.txt
+        run: touch ${{ env.COVERAGE_OUTPUT_DIR }}/base_summary.txt && make TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=0 coverage | grep "coverage rate:" --text -A 4 > ${{ env.COVERAGE_OUTPUT_DIR }}/base_summary.txt
       - name: Rename base.info
         run: mv ${{ env.COVERAGE_OUTPUT_DIR }}/code_coverage.info ${{ env.COVERAGE_OUTPUT_DIR }}/base.info
       - name: Upload BASE coverage
