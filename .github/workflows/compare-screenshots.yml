@@ -6,6 +6,7 @@ on:
       - 'poincare/doc/**'
       - 'ion/src/device/**'
       - 'scandium'
+      - 'external_apps/**'
 
 env:
   MAKEFLAGS: ${{ vars.MAKEFLAGS_CACHED }}
