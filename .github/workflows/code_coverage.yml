@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   coverage:
-    timeout-minutes: 60
+    timeout-minutes: 15
     runs-on: ${{ fromJSON(vars.EPSILON_CACHED_RUNNER_LABELS) }}
     steps:
       - name: Fetch target branch and PR branch
@@ -37,7 +37,6 @@ jobs:
       - name: Create coverage output directory
         run: mkdir -p ${{ env.COVERAGE_OUTPUT_DIR }}
       - name: Build BASE coverage target
-        timeout-minutes: 15
         run: $DOCKER_RUN "touch ${{ env.COVERAGE_OUTPUT_DIR }}/base_summary.txt && make TOOLCHAIN=host-gcc PLATFORM=simulator DEBUG=1 ASSERTIONS=0 coverage | grep \"coverage rate:\" --text -A 4 > ${{ env.COVERAGE_OUTPUT_DIR }}/base_summary.txt"
       - name: Rename base.info
         run: mv ${{ env.COVERAGE_OUTPUT_DIR }}/code_coverage.info ${{ env.COVERAGE_OUTPUT_DIR }}/base.info
@@ -58,7 +57,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Build HEAD coverage target
-        timeout-minutes: 15
         run: $DOCKER_RUN "make PLATFORM=simulator DEBUG=1 ASSERTIONS=0 coverage"
       - name: Rename head.info
         run: mv ${{ env.COVERAGE_OUTPUT_DIR }}/code_coverage.info ${{ env.COVERAGE_OUTPUT_DIR }}/head.info

@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   compare_crc:
+    timeout-minutes: 15
     runs-on: ${{ fromJSON(vars.EPSILON_CACHED_RUNNER_LABELS) }}
     steps:
       - name: Checkout PR's merged head
