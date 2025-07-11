@@ -53,4 +53,5 @@ PRIVATE_SFLAGS_sdl += -DUSING_GENERATED_CONFIG_H
 # The Module needs to export createContext for SDL to work properly
 # This shouldn't be neeeded if we update the SDL
 # See https://github.com/libsdl-org/SDL/pull/12970
-LDFLAGS_sdl += -sEXPORTED_RUNTIME_METHODS=createContext
+# This should be needed to bump emsdk to >=4.0.9
+_sdl_web_exported_runtime_methods = createContext

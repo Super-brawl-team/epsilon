@@ -29,6 +29,7 @@ _ion_web_exported_functions = $(subst $( ),$(,),$(strip $(patsubst %,_%, \
   $(_eadk_exported_functions) \
 )))
 
+# TODO add $(_sdl_web_exported_runtime_methods) here to bump emsdk
 _ion_web_exported_runtime_methods := $(subst $( ),$(,),$(strip \
   UTF8ToString \
   FS \
