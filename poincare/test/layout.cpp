@@ -65,6 +65,19 @@ QUIZ_CASE(pcj_expression_to_layout) {
                                "x-"_l ^ KParenthesesL("y+z"_l));
   assert_expression_layouts_as(KListSlice("L"_e, 2_e, 3_e),
                                "L"_l ^ KParenthesesL("2,3"_l));
+
+  assert_expression_layouts_as(KMult(KAdd(π_e, 1_e), KLogBase(7_e, 3_e)),
+                               KParenthesesL("π+1"_l) ^ "log"_l ^
+                                   KSubscriptL("3"_l) ^ KParenthesesL("7"_l));
+
+  Poincare::Preferences::SharedPreferences()->setLogarithmBasePosition(
+      Poincare::Preferences::LogarithmBasePosition::TopLeft);
+  assert_expression_layouts_as(KMult(KAdd(π_e, 1_e), KLogBase(7_e, 3_e)),
+                               KParenthesesL("π+1"_l) ^
+                                   KPrefixSuperscriptL("3"_l) ^ "log"_l ^
+                                   KParenthesesL("7"_l));
+  Poincare::Preferences::SharedPreferences()->setLogarithmBasePosition(
+      Poincare::Preferences::LogarithmBasePosition::BottomRight);
 }
 
 QUIZ_CASE(pcj_layout_decoder) {
