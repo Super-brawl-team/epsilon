@@ -57,15 +57,17 @@ UserExpression CalculationStore::ansExpression(Context* context) const {
   UserExpression exactOutput = mostRecentCalculation->exactOutput();
   UserExpression approxOutput = mostRecentCalculation->approximateOutput();
   UserExpression ansExpr;
+  /* NOTE: taking input as Ans quickly makes very large calculation on
+   * repetitive Ans calculation.
+   * With the following method we automatically fallback to approx once the
+   * exactOutput if too big to be displayed */
+
   if (!Calculation::CanDisplayExact(mostRecentCalculation->displayOutput()) ||
       exactOutput.isUndefined()) {
     /* Case 1.
-     * If exact output was hidden, it should not be accessible using Ans.
-     * Return input instead so that no precision is lost.
-     * Except if the exact output is equal to its approximation and is neither
-     * Nonreal nor Undefined, in which case the exact output can be used as Ans
-     * since it's exactly the approx (this happens mainly with units).
-     * */
+     * If exact output was hidden it should not be accessible using Ans.
+     * Return approxOutput instead.
+     * If exact is Undefined, Ans is also approxOutput */
     ansExpr = approxOutput;
   } else if (input.recursivelyMatches(&Expression::isApproximate, context) &&
              mostRecentCalculation->equalSign() ==
