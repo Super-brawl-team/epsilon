@@ -4,6 +4,10 @@
 
 QUIZ_CASE(solver_solving_range) {
   Shared::GlobalContext globalContext;
+  assert_solves_with_auto_solving_range("20000=400*1.12^x", {34.51927},
+                                        &globalContext);
+  assert_solves_with_auto_solving_range("1.3052=1.002*1.005^x", {53.00373},
+                                        &globalContext);
   setComplexFormatAndAngleUnit(Cartesian, Radian);
   assert_auto_solving_range_is("cos(x)=0", -15.5654296875, 15.5654296875,
                                &globalContext);

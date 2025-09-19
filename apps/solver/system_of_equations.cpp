@@ -119,6 +119,7 @@ Internal::Tree* SystemOfEquations::prepareEquationForApproximateSolve(
       .m_symbolic = (m_solverContext.overrideUserVariables
                          ? SymbolicComputation::ReplaceDefinedFunctions
                          : SymbolicComputation::ReplaceDefinedSymbols),
+      .m_reductionTarget = ReductionTarget::SystemForApproximation,
       .m_context = context};
   Internal::Projection::UpdateComplexFormatWithExpressionInput(equation, &ctx);
   m_solverContext.complexFormat = ctx.m_complexFormat;
