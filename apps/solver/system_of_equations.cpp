@@ -116,10 +116,10 @@ Internal::Tree* SystemOfEquations::prepareEquationForApproximateSolve(
   Internal::ProjectionContext ctx{
       .m_complexFormat = MathPreferences::SharedPreferences()->complexFormat(),
       .m_angleUnit = MathPreferences::SharedPreferences()->angleUnit(),
+      .m_reductionTarget = ReductionTarget::SystemForApproximation,
       .m_symbolic = (m_solverContext.overrideUserVariables
                          ? SymbolicComputation::ReplaceDefinedFunctions
                          : SymbolicComputation::ReplaceDefinedSymbols),
-      .m_reductionTarget = ReductionTarget::SystemForApproximation,
       .m_context = context};
   Internal::Projection::UpdateComplexFormatWithExpressionInput(equation, &ctx);
   m_solverContext.complexFormat = ctx.m_complexFormat;
