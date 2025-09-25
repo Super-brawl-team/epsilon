@@ -572,6 +572,41 @@ void ContinuousFunction::RecordDataBuffer::setColor(KDColor color,
 
 /* ContinuousFunction::Model */
 
+// TODO_PCJ: with advanced reduction we should only have to reduce once
+/* m_expression is resulting of a simplification with ExpandAlgebraic
+ * expansion strategy. But no expansion strategy could give a simpler
+ * result. For example (x+9)^6 is fully developed with ExpandAlgebraic,
+ * which results in approximation inaccuracy. On the other hand, the
+ * expression (x+1)^2-x^2-2x-1 should be developed so that we understand
+ * that it's equal to zero, and is better handled with ExpandAlgebraic. To
+ * solve this problem, we try to simplify both ways and compare the number
+ * of nodes of each expression. We take the one that has the less node. This
+ * is not ideal because an expression with less nodes does not always mean a
+ * simpler expression, but it's a good compromise for now. */
+SystemExpression getSystemExpressionForApproximation(
+    UserExpression equation, SystemExpression analysisExpression,
+    Context* context, Preferences::ComplexFormat complexFormat,
+    Preferences::AngleUnit angleUnit) {
+  if (equation.isUninitialized()) {
+    return SystemExpression();
+  }
+  bool reductionFailure = false;
+  SystemExpression resultForApproximation = PoincareHelpers::CloneAndReduce(
+      equation, context,
+      {.complexFormat = complexFormat,
+       .angleUnit = angleUnit,
+       .updateComplexFormatWithExpression = false,
+       .target = ReductionTarget::SystemForApproximation,
+       .symbolicComputation = SymbolicComputation::KeepAllSymbols},
+      &reductionFailure);
+  assert(!resultForApproximation.isUninitialized() && !reductionFailure);
+  if (resultForApproximation.numberOfDescendants(true) <
+      analysisExpression.numberOfDescendants(true)) {
+    return resultForApproximation;
+  }
+  return SystemExpression();
+}
+
 SystemExpression ContinuousFunction::Model::expressionReduced(
     const Ion::Storage::Record* record, Context* context) const {
   // m_expression might already be memmoized.
@@ -666,33 +701,12 @@ SystemExpression ContinuousFunction::Model::expressionReduced(
       return m_expression;
     }
   } else {
-    // TODO_PCJ: with advanced reduction we should only have to reduce once
-    /* m_expression is resulting of a simplification with ExpandAlgebraic
-     * expansion strategy. But no expansion strategy could give a simpler
-     * result. For example (x+9)^6 is fully developed with ExpandAlgebraic,
-     * which results in approximation inaccuracy. On the other hand, the
-     * expression (x+1)^2-x^2-2x-1 should be developed so that we understand
-     * that it's equal to zero, and is better handled with ExpandAlgebraic. To
-     * solve this problem, we try to simplify both ways and compare the number
-     * of nodes of each expression. We take the one that has the less node. This
-     * is not ideal because an expression with less nodes does not always mean a
-     * simpler expression, but it's a good compromise for now. */
-    UserExpression equation = expressionEquation(record, context);
-    if (!equation.isUninitialized()) {
-      bool reductionFailure = false;
-      SystemExpression resultForApproximation = PoincareHelpers::CloneAndReduce(
-          equation, context,
-          {.complexFormat = complexFormat,
-           .angleUnit = angleUnit,
-           .updateComplexFormatWithExpression = false,
-           .target = ReductionTarget::SystemForApproximation,
-           .symbolicComputation = SymbolicComputation::KeepAllSymbols},
-          &reductionFailure);
-      assert(!resultForApproximation.isUninitialized() && !reductionFailure);
-      if (resultForApproximation.numberOfDescendants(true) <
-          m_expression.numberOfDescendants(true)) {
-        m_expression = resultForApproximation;
-      }
+    SystemExpression resultForApproximation =
+        getSystemExpressionForApproximation(expressionEquation(record, context),
+                                            m_expression, context,
+                                            complexFormat, angleUnit);
+    if (!resultForApproximation.isUninitialized()) {
+      m_expression = resultForApproximation;
     }
   }
   return m_expression;
