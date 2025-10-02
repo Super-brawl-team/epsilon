@@ -1080,7 +1080,7 @@ QUIZ_CASE(pcj_simplification_power) {
   simplifies_to("√(x)^2", "x", cartesianCtx);
   /* TODO: Should be 0, (exp(i*(arg(A) + arg(B) - arg(A*B))) should be
    * simplified to 1 */
-  simplifies_to("√(-i-1)*√(-i+1)+√((-i-1)*(-i+1))", "√(-2)+√(-1-i)×√(1-i)",
+  simplifies_to("√(-i-1)*√(-i+1)+√((-i-1)*(-i+1))", "√(-(1+i))×√(1-i)+√(2)×i",
                 cartesianCtx);
 
   // Expand/Contract
