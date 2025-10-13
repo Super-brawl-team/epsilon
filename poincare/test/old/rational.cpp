@@ -62,7 +62,7 @@ QUIZ_CASE(poincare_rational_addition) {
 
 static inline void assert_pow_to(const Tree* e1, const Tree* e2,
                                  const Tree* e3) {
-  quiz_assert(Rational::Compare(Rational::IntegerPower(e1, e2), e3) == 0);
+  quiz_assert(Rational::Compare(Rational::IntegerPower(e1, e2).tree, e3) == 0);
 }
 
 QUIZ_CASE(poincare_rational_power) {

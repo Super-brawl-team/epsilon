@@ -423,8 +423,9 @@ QUIZ_CASE(calculation_display_exact_approximate) {
                       &globalContext, &store);
 
   // IntegerOverflow during reduction
-  assertCalculationIs("0^(10^600)", DisplayOutput::ApproximateOnly,
-                      EqualSign::Hidden, nullptr, "0", &globalContext, &store);
+  assertCalculationIs("0^(10^600)",
+                      DisplayOutput::ApproximateIsIdenticalToExact,
+                      EqualSign::Hidden, "0", nullptr, &globalContext, &store);
 
   // Exact output that have dependencies are not displayed
   assertCalculationIs("2→f(x)", DisplayOutput::ExactOnly, EqualSign::Hidden,
