@@ -1905,6 +1905,9 @@ QUIZ_CASE(pcj_simplification_logarithm) {
   simplifies_to("log(9,8)", "2×log(3,8)");
   simplifies_to("log(3,7)+log(5,7)", "log(3,7)+log(5,7)");
   simplifies_to("log(3,8)+log(5,8)", "log(3,8)+log(5,8)");
+
+  simplifies_to("log(10^2025)", "2025");
+  simplifies_to("ln(10^2025)", "2025×(ln(2)+ln(5))");
 }
 
 QUIZ_CASE(pcj_simplification_large_integer_no_crash) {
