@@ -91,7 +91,8 @@ bool Logarithm::ReduceLn(Tree* e) {
       ctx.getTree(KA)->isInteger() && ctx.getTree(KB)->isInteger()) {
     assert(GetComplexSign(ctx.getTree(KA)).imagSign().isNull() &&
            GetComplexSign(ctx.getTree(KA)).realSign().isStrictlyPositive());
-    e->moveTreeOverTree(PatternMatching::Create(KMult(KB, KLn(KA)), ctx));
+    e->moveTreeOverTree(
+        PatternMatching::CreateSimplify(KMult(KB, KLn(KA)), ctx));
     return true;
   }
   return false;
