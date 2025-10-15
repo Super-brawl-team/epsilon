@@ -24,8 +24,8 @@ BaseAndExponentApproximation<T> ApproximateLnOfPower(
   // For a more precise approximation, we compute b*ln(a)
   std::complex<T> a = PrivateToComplex<T>(lnChild->child(0), ctx);
   std::complex<T> b = PrivateToComplex<T>(lnChild->child(1), ctx);
-  if ((a.imag() == 0) && (b.imag() == 0) && (a.real() != NAN) &&
-      (b.real() != NAN) && (a.real() >= 0)) {
+  if ((a.imag() == 0) && (b.imag() == 0) && !std::isnan(a.real()) &&
+      !std::isnan(b.real()) && (a.real() >= 0)) {
     return BaseAndExponentApproximation<T>{.base = a, .exponent = b.real()};
   }
   return BaseAndExponentApproximation<T>{
