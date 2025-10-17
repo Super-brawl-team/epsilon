@@ -244,53 +244,110 @@ bool Binary::ReducePiecewise(Tree* piecewise) {
 }
 
 bool Binary::MakeLenient(Tree* e) {
-  if (!e->isComparison()) {
-    // TODO: Handle other binary operators
+  // Booleans should have been reduced out.
+  assert(!e->isBoolean());
+  if (e->isComparison()) {
+    switch (e->type()) {
+      case Type::Inferior:
+        e->cloneNodeOverNode(KInferiorEqual);
+        break;
+      case Type::Superior:
+        e->cloneNodeOverNode(KSuperiorEqual);
+        break;
+      case Type::NotEqual:
+        e->cloneTreeOverTree(KTrue);
+        return true;
+      case Type::InferiorEqual:
+      case Type::SuperiorEqual:
+      case Type::Equal:
+        return true;
+      default:
+        OMG::unreachable();
+    }
+    assert(!ReduceComparison(e));
+    return true;
+  }
+  if (!e->isLogicalOperator()) {
     return false;
   }
+  bool result = false;
   switch (e->type()) {
-    case Type::Inferior:
-      e->cloneNodeOverNode(KInferiorEqual);
+    case Type::LogicalNot:
+      result = MakeStrict(e->child(0));
       break;
-    case Type::Superior:
-      e->cloneNodeOverNode(KSuperiorEqual);
+    case Type::LogicalAnd:
+    case Type::LogicalOr:
+      result = MakeLenient(e->child(0)) && MakeLenient(e->child(1));
       break;
-    case Type::NotEqual:
-      e->cloneTreeOverTree(KTrue);
+    case Type::LogicalXor:
+      // TODO: Expand the operator and apply MakeLenient.
+      result = false;
       break;
-    case Type::InferiorEqual:
-    case Type::SuperiorEqual:
-    case Type::Equal:
-      break;
+    case Type::LogicalNor:
+    case Type::LogicalNand:
+      // Nor and Nand should have been reduced out.
+      // result = MakeStrict(e->child(0)) && MakeStrict(e->child(1));
     default:
       OMG::unreachable();
   }
-  return true;
+  if (result) {
+    ReduceBooleanOperator(e);
+  }
+  return result;
 }
 
 bool Binary::MakeStrict(Tree* e) {
-  if (!e->isComparison()) {
-    // TODO: Handle other binary operators
+  // Booleans should have been reduced out.
+  assert(!e->isBoolean());
+  if (e->isComparison()) {
+    switch (e->type()) {
+      case Type::Inferior:
+      case Type::Superior:
+      case Type::NotEqual:
+        return true;
+      case Type::InferiorEqual:
+        e->cloneNodeOverNode(KInferior);
+        break;
+      case Type::SuperiorEqual:
+        e->cloneNodeOverNode(KSuperior);
+        break;
+      case Type::Equal:
+        e->cloneTreeOverTree(KFalse);
+        return true;
+
+      default:
+        OMG::unreachable();
+    }
+    assert(!ReduceComparison(e));
+    return true;
+  }
+  if (!e->isLogicalOperator()) {
     return false;
   }
+  bool result = false;
   switch (e->type()) {
-    case Type::Inferior:
-    case Type::Superior:
-    case Type::NotEqual:
+    case Type::LogicalNot:
+      result = MakeLenient(e->child(0));
       break;
-    case Type::InferiorEqual:
-      e->cloneNodeOverNode(KInferior);
+    case Type::LogicalAnd:
+    case Type::LogicalOr:
+      result = MakeStrict(e->child(0)) && MakeStrict(e->child(1));
       break;
-    case Type::SuperiorEqual:
-      e->cloneNodeOverNode(KSuperior);
+    case Type::LogicalXor:
+      // TODO: Expand the operator and apply MakeStrict.
+      result = false;
       break;
-    case Type::Equal:
-      e->cloneTreeOverTree(KFalse);
-      break;
+    case Type::LogicalNor:
+    case Type::LogicalNand:
+      // Nor and Nand should have been reduced out.
+      // result = MakeLenient(e->child(0)) && MakeLenient(e->child(1));
     default:
       OMG::unreachable();
   }
-  return true;
+  if (result) {
+    ReduceBooleanOperator(e);
+  }
+  return result;
 }
 
 }  // namespace Poincare::Internal

@@ -27,17 +27,17 @@ class Binary {
 
   static bool ReducePiecewise(Tree* e);
 
-  /* Make operators lenient. Return false if unhandled. Examples :
+  /* Make reduced operators lenient. Return false if unhandled. Examples :
    * a > b  is turned into a >= b
    * a <= b is turned into a <= b
    * a != b is turned into True
-   * not(a = b) returns false. */
+   * xor(a > b, a >= c) returns false. */
   static bool MakeLenient(Tree* e);
-  /* Make operators strict. Return false if unhandled. Examples :
+  /* Make reduced operators strict. Return false if unhandled. Examples :
    * a >= b is turned into a > b
    * a < b  is turned into a < b
    * a = b  is turned into False
-   * not(a = b) returns false. */
+   * xor(a > b, a >= c) returns false. */
   static bool MakeStrict(Tree* e);
 
  private:
