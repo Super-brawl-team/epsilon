@@ -98,30 +98,6 @@ jobs:
         with:
           name: epsilon-windows.exe
           path: output/debug/optimized/windows/epsilon.exe
-  web:
-    timeout-minutes: 15
-    runs-on: ${{ fromJSON(vars.EPSILON_CACHED_RUNNER_LABELS) }}
-    if: ${{ (fromJSON(vars.ADVANCED_JOBS) || fromJSON(github.event.inputs.web)) }}
-    env:
-      MAKEFLAGS: ${{ vars.MAKEFLAGS_CACHED }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Read Emscripten version
-        run: echo "EMSDK_VERSION=$(cat .emsdk-version)" >> $GITHUB_ENV
-      - name: Download emscripten
-        uses: numworks/setup-emscripten@latest
-        with:
-          sdk: ${{ env.EMSDK_VERSION }}
-      - run: build/setup.sh --only-simulator
-      - run: make PLATFORM=simulator TARGET=web ASSERTIONS=1 epsilon.html test.js
-      - run: node output/debug/optimized/web/test.js --headless --limit-stack-usage
-        timeout-minutes: 5
-      - uses: actions/upload-artifact@v4
-        with:
-          name: epsilon.html
-          path: output/debug/optimized/web/epsilon.html
-          retention-days: 7
   linux:
     timeout-minutes: 15
     runs-on: ${{ fromJSON(vars.EPSILON_CACHED_RUNNER_LABELS) }}
