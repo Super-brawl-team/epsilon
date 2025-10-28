@@ -32,18 +32,18 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  MAKEFLAGS: -j32
+  MAKEFLAGS: -j2
 
 jobs:
   device:
-    timeout-minutes: 15
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     if: ${{ (fromJSON(github.event.inputs.device)) }}
     strategy:
       matrix:
         model: [n0110, n0115, n0120]
     env:
-      MAKEFLAGS: -j32
+      MAKEFLAGS: -j2
     steps:
       - uses: actions/checkout@v4
 
@@ -72,7 +72,7 @@ jobs:
       - if: ${{ steps.core.outcome == 'success' }}
         run: $DOCKER_RUN "make MODEL=${{ matrix.model }} bench.ram.dfu"
   windows:
-    timeout-minutes: 15
+    timeout-minutes: 60
     runs-on: windows-latest
     if: ${{ (fromJSON(github.event.inputs.windows)) }}
     defaults:
@@ -99,10 +99,10 @@ jobs:
           name: epsilon-windows.exe
           path: output/debug/optimized/windows/epsilon.exe
   linux:
-    timeout-minutes: 15
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      MAKEFLAGS: -j32
+      MAKEFLAGS: -j2
     steps:
       - uses: actions/checkout@v4
 
@@ -125,7 +125,7 @@ jobs:
           name: epsilon-linux.bin
           path: output/debug/optimized/linux/epsilon.bin
   macos:
-    timeout-minutes: 15
+    timeout-minutes: 60
     runs-on: macOS-latest
     if: ${{ (fromJSON(github.event.inputs.macos)) }}
     env:
@@ -141,10 +141,10 @@ jobs:
           name: epsilon-macos.zip
           path: output/debug/optimized/macos/epsilon.app
   poincarejs:
-    timeout-minutes: 15
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      MAKEFLAGS: -j32
+      MAKEFLAGS: -j2
     steps:
       - name: Checkout
         uses: actions/checkout@v4

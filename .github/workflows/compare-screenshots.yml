@@ -9,7 +9,7 @@ on:
       - 'external_apps/**'
 
 env:
-  MAKEFLAGS: -j32
+  MAKEFLAGS: -j2
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   compare_crc:
-    timeout-minutes: 15
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR's merged head
@@ -27,8 +27,8 @@ jobs:
       - name: Build PR head
         run: $DOCKER_RUN "make TOOLCHAIN=host-clang PLATFORM=simulator ASSERTIONS=1 epsilon.bin epsilon.cas.bin"
       - name: Compare crc of screenshots (No CAS)
-        timeout-minutes: 15
+        timeout-minutes: 60
         run: $DOCKER_RUN "\$PYTHON build/screenshots/compare_crc.py output/debug/optimized/linux/epsilon.bin -n"
       - name: Compare crc of screenshots (CAS)
-        timeout-minutes: 15
+        timeout-minutes: 60
         run: $DOCKER_RUN "\$PYTHON build/screenshots/compare_crc.py -d tests/screenshots_dataset_cas output/debug/optimized/linux/epsilon.cas.bin -n"

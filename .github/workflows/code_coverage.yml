@@ -4,10 +4,10 @@ on: workflow_call
 
 jobs:
   coverage:
-    timeout-minutes: 15
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      MAKEFLAGS: -j32
+      MAKEFLAGS: -j2
       COVERAGE_OUTPUT_DIR: 'output/debug/no_assert/linux/coverage'
     steps:
       - name: Fetch target branch and PR branch

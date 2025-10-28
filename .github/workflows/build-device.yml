@@ -7,7 +7,7 @@ on:
         default: false
 
 env:
-  MAKEFLAGS: -j32
+  MAKEFLAGS: -j2
 
 jobs:
   build:

@@ -5,7 +5,7 @@ on:
       - 'external_apps/**'
 
 env:
-  MAKEFLAGS: -j32
+  MAKEFLAGS: -j2
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -7,7 +7,7 @@ on:
         default: false
 
 env:
-  MAKEFLAGS: -j32
+  MAKEFLAGS: -j2
   DEBUG: ${{ fromJSON(github.event.inputs.debug) && '1' || '0' }}
 
 jobs:
