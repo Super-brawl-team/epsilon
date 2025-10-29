@@ -142,6 +142,8 @@ static inline void ion_main_inner(const char* testFilter,
 #endif
 }
 
+bool sPrintToleratedTests = false;
+
 void ion_main(int argc, const char* const argv[]) {
   const char* testFilter = nullptr;
   const char* fromFilter = nullptr;
@@ -149,6 +151,7 @@ void ion_main(int argc, const char* const argv[]) {
   int chunkId = 0;
   int numberOfChunks = 1;
   sSkipAssertions = false;
+  sPrintToleratedTests = false;
 #if !PLATFORM_DEVICE
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "--until") == 0) {
@@ -163,6 +166,8 @@ void ion_main(int argc, const char* const argv[]) {
     } else if (strcmp(argv[i], "--skip-assertions") == 0 ||
                strcmp(argv[i], "-s") == 0) {
       sSkipAssertions = true;
+    } else if (strcmp(argv[i], "--tolerate") == 0) {
+      sPrintToleratedTests = true;
     } else if (strcmp(argv[i], "--chunk-id") == 0) {
       assert(i + 1 < argc);
       chunkId = atoi(argv[i + 1]);

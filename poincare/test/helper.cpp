@@ -11,6 +11,7 @@
 #include <poincare/src/layout/parsing/rack_parser.h>
 #include <poincare/src/layout/rack_from_text.h>
 #include <poincare/src/memory/tree_stack_checkpoint.h>
+#include <quiz.h>
 
 using namespace Poincare::Internal;
 
@@ -64,7 +65,9 @@ void quiz_tolerate_print_if_failure(bool test, const char* input,
     Poincare::Print::UnsafeCustomPrintf(buffer + i, bufferSize - i, "\t%s",
                                         observed);
   }
-  quiz_print(buffer);
+  if (sPrintToleratedTests) {
+    quiz_print(buffer);
+  }
 }
 
 void quiz_assert_print_if_failure(bool test, const char* information,
