@@ -241,6 +241,7 @@ void SolutionsController::viewWillAppear() {
   } else if (system->type() ==
                  SystemOfEquations::Type::PolynomialMonovariable &&
              system->numberOfSolutions() == 1) {
+    // Degree 3 real equation should always have at least one real solution.
     assert(system->degree() == 2);
     /* For quadratic polynoms, if only delta is displayed, it means that the
      * solutions are not real. */
