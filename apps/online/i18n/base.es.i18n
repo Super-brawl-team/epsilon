@@ -1,5 +1,5 @@
-OnlineApp = "Finanzas"
-OnlineAppCapital = "FINANZAS"
+OnlineApp = "En linea"
+OnlineAppCapital = "EN LINEA"
 SimpleOnline = "Interés simple"
 SimpleOnlineDescription = "Los intereses se calculan una vez"
 CompoundOnline = "Interés compuesto"
