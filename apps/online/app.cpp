@@ -61,8 +61,8 @@ App::App(Snapshot* snapshot)
     : Shared::MathApp(snapshot, &m_stackViewController),
       m_resultController(&m_stackViewController),
       m_parametersController(&m_stackViewController, &m_resultController),
-      m_interestMenuController(&m_stackViewController, &m_parametersController),
-      m_menuController(&m_stackViewController, &m_interestMenuController),
+      m_onlineMenuController(&m_stackViewController, &m_parametersController),
+      m_menuController(&m_stackViewController, &m_onlineMenuController),
       m_stackViewController(&m_modalViewController, &m_menuController,
                             Escher::StackViewController::Style::GrayGradation) {
 }

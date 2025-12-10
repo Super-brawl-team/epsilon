@@ -36,8 +36,8 @@ I18n::Message SimpleOnlineData::labelForParameter(uint8_t param) const {
 I18n::Message SimpleOnlineData::sublabelForParameter(uint8_t param) const {
   assert(param < numberOfParameters());
   constexpr I18n::Message k_sublabels[k_numberOfParameters] = {
-      I18n::Message::NumberOfDays, I18n::Message::AnnualInterestRate,
-      I18n::Message::InitialPrincipal, I18n::Message::FinalInterestAmount,
+      I18n::Message::NumberOfDays, I18n::Message::AnnualOnlineRate,
+      I18n::Message::InitialPrincipal, I18n::Message::FinalOnlineAmount,
       I18n::Message::NumberOfDaysConvention};
   return k_sublabels[param];
 }
@@ -98,7 +98,7 @@ I18n::Message CompoundOnlineData::sublabelForParameter(uint8_t param) const {
   assert(param < numberOfParameters());
   constexpr I18n::Message k_sublabels[k_numberOfParameters] = {
       I18n::Message::NumberOfPayments,
-      I18n::Message::NominalAnnualInterestRate,
+      I18n::Message::NominalAnnualOnlineRate,
       I18n::Message::PresentValue,
       I18n::Message::FutureValue,
       I18n::Message::PaymentEachPeriod,
@@ -197,13 +197,13 @@ double CompoundOnlineData::computeUnknownValue() {
    * If rPct is 0, α = N and β = 1
    * If Pmt is 0, PY = CY and FV = PV * (1 + rPct/100CY)^N
    */
-  double N = getValue(static_cast<uint8_t>(Parameter::N));
-  double rPct = getValue(static_cast<uint8_t>(Parameter::rPct));
-  double PV = getValue(static_cast<uint8_t>(Parameter::PV));
-  double Pmt = getValue(static_cast<uint8_t>(Parameter::Pmt));
-  double FV = getValue(static_cast<uint8_t>(Parameter::FV));
-  double CY = getValue(static_cast<uint8_t>(Parameter::CY));
-  double PY = getValue(static_cast<uint8_t>(Parameter::PY));
+  double N = this->getValue(static_cast<uint8_t>(Parameter::N));
+  double rPct = this->getValue(static_cast<uint8_t>(Parameter::rPct));
+  double PV = this->getValue(static_cast<uint8_t>(Parameter::PV));
+  double Pmt = this->getValue(static_cast<uint8_t>(Parameter::Pmt));
+  double FV = this->getValue(static_cast<uint8_t>(Parameter::FV));
+  double CY = this->getValue(static_cast<uint8_t>(Parameter::CY));
+  double PY = this->getValue(static_cast<uint8_t>(Parameter::PY));
   double S = (m_booleanParam ? 1.0 : 0.0);
   double i = computeI(rPct, CY, PY);
   double b = computeB(i, N);

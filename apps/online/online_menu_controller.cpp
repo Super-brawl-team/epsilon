@@ -1,19 +1,19 @@
-#include "interest_menu_controller.h"
+#include "online_menu_controller.h"
 
 #include "app.h"
 
 namespace Online {
 
-InterestMenuController::InterestMenuController(
+OnlineMenuController::OnlineMenuController(
     Escher::StackViewController* parentResponder,
-    ParametersController* interestController)
+    ParametersController* onlineController)
     : Escher::ListWithTopAndBottomController(parentResponder, &m_messageView),
       m_messageView(I18n::Message::ParameterChoose, k_messageFormat),
-      m_parametersController(interestController) {
+      m_parametersController(onlineController) {
   selectRow(0);
 }
 
-void InterestMenuController::viewWillAppear() {
+void OnlineMenuController::viewWillAppear() {
   int nRows = numberOfRows();
   for (int i = 0; i < nRows; i++) {
     m_cells[i].label()->setMessage(
@@ -25,7 +25,7 @@ void InterestMenuController::viewWillAppear() {
   ViewController::viewWillAppear();
 }
 
-bool InterestMenuController::handleEvent(Ion::Events::Event event) {
+bool OnlineMenuController::handleEvent(Ion::Events::Event event) {
   // canBeActivatedByEvent can be called on any cell with chevron
   if (m_cells[0].canBeActivatedByEvent(event)) {
     App::GetOnlineData()->setUnknown(parameterAtIndex(innerSelectedRow()));
@@ -35,19 +35,19 @@ bool InterestMenuController::handleEvent(Ion::Events::Event event) {
   return popFromStackViewControllerOnLeftEvent(event);
 }
 
-const char* InterestMenuController::title() const {
+const char* OnlineMenuController::title() const {
   return I18n::translate(App::GetOnlineData()->menuTitle());
 }
 
-int InterestMenuController::numberOfRows() const {
+int OnlineMenuController::numberOfRows() const {
   return App::GetOnlineData()->numberOfUnknowns();
 }
 
-KDCoordinate InterestMenuController::nonMemoizedRowHeight(int row) {
+KDCoordinate OnlineMenuController::nonMemoizedRowHeight(int row) {
   return protectedNonMemoizedRowHeight(&m_cells[row], row);
 }
 
-uint8_t InterestMenuController::parameterAtIndex(int index) const {
+uint8_t OnlineMenuController::parameterAtIndex(int index) const {
   // Parameters are displayed in the same order as the enum order.
   assert(index >= 0 && index < App::GetOnlineData()->numberOfUnknowns());
   return index;

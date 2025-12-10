@@ -1,6 +1,6 @@
 SOURCES_apps += $(addprefix $(PATH_apps)/online/,$(addsuffix :-test, \
   app.cpp \
-  interest_menu_controller.cpp \
+  online_menu_controller.cpp \
   menu_controller.cpp \
   parameters_controller.cpp \
   result_controller.cpp \

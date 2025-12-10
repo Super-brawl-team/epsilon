@@ -11,14 +11,14 @@
 
 namespace Online {
 
-using InterestMenuCell =
+using OnlineMenuCell =
     Escher::MenuCell<Escher::MessageTextView, Escher::MessageTextView,
                      Escher::ChevronView>;
 
-class InterestMenuController : public Escher::ListWithTopAndBottomController {
+class OnlineMenuController : public Escher::ListWithTopAndBottomController {
  public:
-  InterestMenuController(Escher::StackViewController* parentResponder,
-                         ParametersController* interestController);
+  OnlineMenuController(Escher::StackViewController* parentResponder,
+                         ParametersController* onlineController);
   void viewWillAppear() override;
   bool handleEvent(Ion::Events::Event e) override;
   const char* title() const override;
@@ -40,7 +40,7 @@ class InterestMenuController : public Escher::ListWithTopAndBottomController {
   uint8_t parameterAtIndex(int index) const;
 
   Escher::MessageTextView m_messageView;
-  InterestMenuCell m_cells[OnlineData::k_maxNumberOfUnknowns];
+  OnlineMenuCell m_cells[OnlineData::k_maxNumberOfUnknowns];
   ParametersController* m_parametersController;
 };
 

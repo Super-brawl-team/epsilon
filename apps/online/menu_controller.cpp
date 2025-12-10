@@ -9,25 +9,25 @@
 using namespace Online;
 
 MenuController::MenuController(Escher::StackViewController* parentResponder,
-                               InterestMenuController* interestMenuController)
+                               OnlineMenuController* onlineMenuController)
     : Escher::UniformSelectableListController<
           Escher::MenuCell<Escher::MessageTextView, Escher::MessageTextView,
                            Escher::ChevronView>,
           k_numberOfCells>(parentResponder),
-      m_interestMenuController(interestMenuController) {
+      m_onlineMenuController(onlineMenuController) {
   selectRow(0);
-  cell(k_indexOfSimpleInterest)
+  cell(k_indexOfSimpleOnline)
       ->label()
-      ->setMessage(I18n::Message::SimpleInterest);
-  cell(k_indexOfSimpleInterest)
+      ->setMessage(I18n::Message::SimpleOnline);
+  cell(k_indexOfSimpleOnline)
       ->subLabel()
-      ->setMessage(I18n::Message::SimpleInterestDescription);
-  cell(k_indexOfCompoundInterest)
+      ->setMessage(I18n::Message::SimpleOnlineDescription);
+  cell(k_indexOfCompoundOnline)
       ->label()
-      ->setMessage(I18n::Message::CompoundInterest);
-  cell(k_indexOfCompoundInterest)
+      ->setMessage(I18n::Message::CompoundOnline);
+  cell(k_indexOfCompoundOnline)
       ->subLabel()
-      ->setMessage(I18n::Message::CompoundInterestDescription);
+      ->setMessage(I18n::Message::CompoundOnlineDescription);
   centerTable(Escher::Metric::DisplayHeightWithoutTitleBar);
 }
 
@@ -46,14 +46,14 @@ void MenuController::handleResponderChainEvent(
 bool MenuController::handleEvent(Ion::Events::Event event) {
   // canBeActivatedByEvent can be called on any cell with chevron
   if (cell(0)->canBeActivatedByEvent(event)) {
-    bool simpleInterestRowSelected = (selectedRow() == k_indexOfSimpleInterest);
-    assert(simpleInterestRowSelected ||
-           selectedRow() == k_indexOfCompoundInterest);
+    bool simpleOnlineRowSelected = (selectedRow() == k_indexOfSimpleOnline);
+    assert(simpleOnlineRowSelected ||
+           selectedRow() == k_indexOfCompoundOnline);
 
-    // Set the interest data model
-    App::SetModel(simpleInterestRowSelected);
-    m_interestMenuController->selectFirstCell();
-    stackOpenPage(m_interestMenuController);
+    // Set the online data model
+    App::SetModel(simpleOnlineRowSelected);
+    m_onlineMenuController->selectFirstCell();
+    stackOpenPage(m_onlineMenuController);
     return true;
   }
   return false;

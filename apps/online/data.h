@@ -93,7 +93,7 @@ class SimpleOnlineData : public OnlineData {
   I18n::Message labelForParameter(uint8_t param) const override;
   I18n::Message sublabelForParameter(uint8_t param) const override;
   I18n::Message menuTitle() const override {
-    return I18n::Message::SimpleInterest;
+    return I18n::Message::SimpleOnline;
   }
   bool checkValue(uint8_t param, double value) const override;
   uint8_t numberOfParameters() const override { return k_numberOfParameters; }
@@ -152,7 +152,7 @@ class CompoundOnlineData : public OnlineData {
   I18n::Message labelForParameter(uint8_t param) const override;
   I18n::Message sublabelForParameter(uint8_t param) const override;
   I18n::Message menuTitle() const override {
-    return I18n::Message::CompoundInterest;
+    return I18n::Message::CompoundOnline;
   }
   double defaultValue(uint8_t param) const override;
   bool checkValue(uint8_t param, double value) const override;
@@ -175,7 +175,7 @@ class CompoundOnlineData : public OnlineData {
 
 class Data {
  public:
-  // By default, select the simple interest data model
+  // By default, select the simple online data model
   Data()
       /* The cast is there to prevent GCC from warning about m_sharedValues
        * array being used uninitialized */
@@ -184,7 +184,7 @@ class Data {
         m_selectedModel(true) {}
   void reset();
   void setModel(bool selectedModel) { m_selectedModel = selectedModel; }
-  OnlineData* OnlineData() {
+  OnlineData* onlineData() {
     return m_selectedModel
                ? static_cast<OnlineData*>(&m_simpleOnlineData)
                : static_cast<OnlineData*>(&m_compoundOnlineData);

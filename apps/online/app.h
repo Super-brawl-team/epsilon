@@ -7,7 +7,7 @@
 #include <omg/ring_buffer.h>
 
 #include "data.h"
-#include "interest_menu_controller.h"
+#include "online_menu_controller.h"
 #include "menu_controller.h"
 #include "parameters_controller.h"
 #include "result_controller.h"
@@ -30,7 +30,7 @@ class App : public Shared::MathApp {
   class Snapshot : public Shared::SharedApp::Snapshot {
    public:
     /* At most 3 nested menus from MenuController :
-     * InterestMenuController, ParametersController and ResultController */
+     * OnlineMenuController, ParametersController and ResultController */
     constexpr static uint8_t k_maxDepth = 3;
 
     App* unpack(Escher::Container* container) override;
@@ -48,7 +48,7 @@ class App : public Shared::MathApp {
 
   static App* app() { return static_cast<App*>(Escher::App::app()); }
   static OnlineData* GetOnlineData() {
-    return app()->snapshot()->data()->OnlineData();
+    return app()->snapshot()->data()->onlineData();
   }
   static void SetModel(bool selectedModel) {
     return app()->snapshot()->data()->setModel(selectedModel);
@@ -70,7 +70,7 @@ class App : public Shared::MathApp {
   // Controllers
   ResultController m_resultController;
   ParametersController m_parametersController;
-  InterestMenuController m_interestMenuController;
+  OnlineMenuController m_onlineMenuController;
   MenuController m_menuController;
   Escher::StackViewController::Default m_stackViewController;
 };

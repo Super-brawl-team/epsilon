@@ -59,7 +59,7 @@ void ParametersController::fillCellForRow(HighlightCell* cell, int row) {
   if (type == k_buttonCellType) {
     return;
   }
-  uint8_t param = interestParameterAtIndex(row);
+  uint8_t param = onlineParameterAtIndex(row);
   if (type == k_dropdownCellType) {
     assert(&m_dropdownCell == cell);
     m_dropdownCell.label()->setMessage(
@@ -105,7 +105,7 @@ void ParametersController::onDropdownSelected(int selectedRow) {
   App::GetOnlineData()->m_booleanParam = (selectedRow == 0);
 }
 
-uint8_t ParametersController::interestParameterAtIndex(int index) const {
+uint8_t ParametersController::onlineParameterAtIndex(int index) const {
   uint8_t unknownParam = App::GetOnlineData()->getUnknown();
   assert(unknownParam < App::GetOnlineData()->numberOfUnknowns());
   if (unknownParam <= index) {
@@ -142,11 +142,11 @@ TextField* ParametersController::textFieldOfCellAtIndex(HighlightCell* cell,
 }
 
 double ParametersController::parameterAtIndex(int index) {
-  return App::GetOnlineData()->getValue(interestParameterAtIndex(index));
+  return App::GetOnlineData()->getValue(onlineParameterAtIndex(index));
 }
 
 bool ParametersController::setParameterAtIndex(int parameterIndex, double f) {
-  uint8_t param = interestParameterAtIndex(parameterIndex);
+  uint8_t param = onlineParameterAtIndex(parameterIndex);
   if (!App::GetOnlineData()->checkValue(param, f)) {
     App::app()->displayWarning(I18n::Message::UndefinedValue);
     return false;
